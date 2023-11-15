@@ -21,3 +21,19 @@ const { copied, copy } = useClipboard({ legacy: true });
 1. **此功能只支持在安全上下文(HTTPS)中使用，而HTTP下不支持，**
 2. 本地传递的资源，如那些带有 `http://127.0.0.1`、`http://localhost` 和 `http://*.localhost` 网址（如 `http://dev.whatever.localhost/`）和 `file://` 网址的资源也是认为经过安全传递的。
 
+* ### `document.execCommand('copy')`
+
+`document.execCommand()`是操作剪贴板的传统方法，各种浏览器都支持。逻辑很清晰，这里需要注意的是必须选中当前元素内的文字，否则无法实现复制功能。
+
+```javascript
+function legacyCopy(value: string) {
+    const ta = document.createElement('textarea')
+    ta.value = value ?? ''
+    ta.style.position = 'absolute'
+    ta.style.opacity = '0'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    ta.remove()
+}js
+```
