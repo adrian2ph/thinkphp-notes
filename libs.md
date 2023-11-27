@@ -4,6 +4,50 @@
 
 ### Browser
 
+
+
+#### Side-effect Clean Up <a href="#side-effect-clean-up" id="side-effect-clean-up"></a>
+
+Similar to Vue's `watch` and `computed` that will be disposed when the component is unmounted, VueUse's functions also clean up the side-effects automatically.Not all functions return a `stop` handler so a more general solution is to use the [`effectScope` API](https://vuejs.org/api/reactivity-advanced.html#effectscope) from Vue.
+
+* ```
+  vue3 Composition API: effectScope
+  ```
+* Creates an effect scope object which can capture the reactive effects (i.e. computed and watchers) created within it so that these effects can be disposed together.
+* vue2 example below
+
+<pre class="language-javascript"><code class="lang-javascript">  import { useStorage, watchDebounced } from '@vueuse/core'
+  import { effectScope } from '@vue/composition-api'
+
+  export default {
+    
+    data() {
+      const channelsValue = useStorage('online-hour-channel', [])
+      return {
+        channelsValue
+      }
+    },
+    created() {
+      this.scope = effectScope()
+      this.scope.run(() => {
+        const unwatch = watchDebounced(this.channelsValue, (obj) => {
+          console.log('watchDebounced ', obj)
+        }, { debounce: 500, maxWait: 1000 })
+      })
+    },
+    mounted() {
+    },
+    watch: {
+      channelsValue() {
+        console.log('channelsValue', channelsValue)
+      }
+    },
+    beforeDestroy() {
+      <a data-footnote-ref href="#user-content-fn-1">this.scope.stop()</a>
+    }
+  }
+</code></pre>
+
 #### useClipboard <a href="#useclipboard" id="useclipboard"></a>
 
 
@@ -37,3 +81,5 @@ function legacyCopy(value: string) {
     ta.remove()
 }js
 ```
+
+[^1]: 
