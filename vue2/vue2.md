@@ -129,3 +129,66 @@ export default {
 }
 </script>
 ```
+
+
+
+### persistance in vuex&#x20;
+
+
+
+when you wanna persistance vuex in vue2
+
+* useStorage and toReactive
+* ```
+  import { useStorage, toReactive } from '@vueuse/core'
+  ...
+  const stateRef = useStorage('vuex:settings', {
+    showSettings: showSettings,
+    fixedHeader: fixedHeader,
+    sidebarLogo: sidebarLogo,
+    showBeta: showBeta
+  })
+  const state = toReactive(stateRef)
+  ```
+
+```javascript
+import defaultSettings from '@/settings'
+import { useStorage, toReactive } from '@vueuse/core'
+const { showSettings, fixedHeader, sidebarLogo, showBeta } = defaultSettings
+
+const stateRef = useStorage('vuex:settings', {
+  showSettings: showSettings,
+  fixedHeader: fixedHeader,
+  sidebarLogo: sidebarLogo,
+  showBeta: showBeta
+})
+const state = toReactive(stateRef)
+
+const mutations = {
+  CHANGE_SETTING: (state, { key, value }) => {
+    // eslint-disable-next-line no-prototype-builtins
+    if (state.hasOwnProperty(key)) {
+      state[key] = value
+    }
+  }
+}
+
+const actions = {
+  changeSetting({ commit }, data) {
+    commit('CHANGE_SETTING', data)
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions
+}
+
+```
+
+
+
+
+
