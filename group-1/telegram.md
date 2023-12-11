@@ -88,3 +88,19 @@ EOF
 
 ```
 
+
+
+## longman/telegram-bot&#x20;
+
+
+
+#### install the extension
+
+```
+composer require longman/telegram-bot --ignore-platform-req=ext-gd
+```
+
+
+
+
+
