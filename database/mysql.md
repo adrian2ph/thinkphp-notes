@@ -109,3 +109,14 @@ ORDER BY platform_type,client_channel
 
 
 ```
+
+
+
+* update and join
+
+```sql
+UPDATE ops_domain AS t1
+JOIN ops_domain_host AS t2 ON t1.domain_host_id = t2.id 
+SET t1.name_host = t2.name_host,
+t1.account = t2.account;
+```
