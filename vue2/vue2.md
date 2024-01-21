@@ -190,5 +190,135 @@ export default {
 
 
 
+### 操作引导
+
+使用纯js的库[driver.js](https://driverjs.com/)，根据css选择器进行页面操作引导
+
+
+
+#### floating  icon group
+
+
+
+使用图标入口
+
+````
+```vue
+    <div class="floating-group-container">
+      <i class="el-icon-info" @click="startTour"></i>
+      <!-- <MarkdownHelp title="数据说明" :markdownText="helpDialog.markdownText"/> -->
+    </div>
+```
+````
+
+
+
+悬浮图表组的全局样式
+
+````
+```scss
+.floating-group-container {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  // background-color: #fff;
+  color: #d0d0d0;
+  width: 40px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  // box-shadow: 0 0 6px rgba(0,0,0,.12);
+  border-radius: 5px;
+  z-index: 1024;
+  overflow: visible;
+
+  i {
+    margin: auto;
+    width: 100%;
+    font-size: 32px;
+    text-align: center;
+    &:hover {
+      color: $--color-success;
+      cursor: pointer;
+
+      transform: scale(1.2);
+      transition: all .1s;
+    }
+  }
+
+}
+```
+````
+
+
+
+#### 使用markdown弹窗帮助文档
+
+````
+```vue
+<template>
+<div>
+  <el-dialog append-to-body v-bind="$attrs" :title="title" v-on="$listeners" @open="onOpen" @close="onClose">
+    <div v-if="loading">Loading...</div>
+    <div v-else v-html="markdownHtml"></div>
+  </el-dialog>
+</div>
+</template>
+  
+  <script>
+  import MarkdownIt from 'markdown-it';
+  
+  export default {
+    props: {
+      markdownText: {
+        type: String,
+        require: true
+      },
+      title: {
+        type: String,
+        require: true
+      }
+    },
+    data() {
+      return {
+        markdownHtml: '',
+        loading: true
+      };
+    },
+    created() {
+      this.md = new MarkdownIt()
+    },
+    watch: {
+      markdownText(val) {
+        this.mdRender(val)
+      },
+    },
+    mounted() {
+      this.mdRender(this.markdownText)
+    },
+    methods: {
+      onOpen() {
+      },
+      onClose() {
+      },
+      close() {
+      },
+      mdRender(val) {
+        this.loading = true
+        this.markdownHtml = this.md.render(val || '');
+        this.loading = false
+      }
+    },
+  };
+  </script>
+  
+  <style>
+  /* Add your component-specific styles here */
+  </style>
+  
+```
+````
+
 
 
